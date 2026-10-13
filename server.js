@@ -1,3 +1,5 @@
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
 // Forza l'uso di IPv4 per evitare l'errore ENETUNREACH su Render
 const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
@@ -98,8 +100,8 @@ app.post('/api/risorse', async (req, res) => {
         res.status(500).json({ error: 'Errore durante il salvataggio della risorsa' });
     }
 });
-
 // Avvio del server
 app.listen(port, () => {
     console.log(`Server backend in ascolto sulla porta ${port}`);
 });
+"Aggiunto fix IPv4"
