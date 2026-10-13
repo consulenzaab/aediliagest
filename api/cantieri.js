@@ -5,8 +5,7 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false }
 });
 
-export default async function handler(req, res) {
-    // Configurazione CORS universale
+module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -16,8 +15,7 @@ export default async function handler(req, res) {
     );
 
     if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
+        return res.status(200).end();
     }
 
     if (req.method === 'GET') {
@@ -25,26 +23,26 @@ export default async function handler(req, res) {
             const result = await pool.query('SELECT * FROM cantieri ORDER BY id DESC');
             return res.status(200).json(result.rows);
         } catch (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Errore durante il recupero dei cantieri' });
+            console.error("Errore DB cantieri:", err);
+            return res.status(500).json({ error: err.message });
         }
     }
 
     if (req.method === 'POST') {
-        const { nome, cliente, indirizzo, stato } = req.body;
+        const { codice_cantiere, nome, indirizzo, budget_stimato } = req.body;
         try {
             const query = `
-                INSERT INTO cantieri (nome, cliente, indirizzo, stato) 
-                VALUES ($1, $2, $3, $4) RETURNING *;
+                INSERT INTO cantieri (codice_cantiere, nome, indirizzo, budget_stimato, stato) 
+                VALUES ($1, $2, $3, $4, $5) RETURNING *;
             `;
-            const values = [nome, cliente, indirizzo, stato || 'In corso'];
+            const values = [codice_cantiere, nome, indirizzo, budget_stimato || 0, 'In corso'];
             const result = await pool.query(query, values);
             return res.status(201).json(result.rows[0]);
         } catch (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Errore durante la creazione del cantiere' });
+            console.error("Errore salvataggio cantiere:", err);
+            return res.status(500).json({ error: err.message });
         }
     }
 
     return res.status(405).json({ error: 'Metodo non consentito' });
-}
+};
