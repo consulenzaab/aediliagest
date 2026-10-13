@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HardHat, Building2, Users, Receipt, FileText, PlusCircle, RefreshCw } from 'lucide-react';
 
 // URL del tuo backend su Render
-const BACKEND_URL = 'https://aediliagest-backend.onrender.com';
+const BACKEND_URL = /api/cantieri;/api/risorse
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('cantieri');
