@@ -1,13 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
 const db = require('./db');
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Rotta di verifica dello stato del server
+// Rotta di test per verificare che l'API sia attiva
 app.get('/', (req, res) => {
   res.send('API AediliaGest attive e funzionanti!');
 });
@@ -18,6 +19,7 @@ app.get('/api/cantieri', async (req, res) => {
     const result = await db.query('SELECT * FROM cantieri ORDER BY id DESC');
     res.json(result.rows);
   } catch (err) {
+    console.error("ERRORE DATABASE COMPLETO (/api/cantieri):", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -32,6 +34,7 @@ app.post('/api/cantieri', async (req, res) => {
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
+    console.error("ERRORE DATABASE COMPLETO (POST /api/cantieri):", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -42,6 +45,7 @@ app.get('/api/risorse', async (req, res) => {
     const result = await db.query('SELECT * FROM risorse ORDER BY id DESC');
     res.json(result.rows);
   } catch (err) {
+    console.error("ERRORE DATABASE COMPLETO (/api/risorse):", err);
     res.status(500).json({ error: err.message });
   }
 });
