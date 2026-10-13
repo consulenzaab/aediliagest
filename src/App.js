@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { HardHat, Building2, Users, Receipt, FileText, PlusCircle, RefreshCw } from 'lucide-react';
 
-// URL del tuo backend su Render
-const BACKEND_URL = /api/cantieri;/api/risorse
+// URL del backend: essendo su Vercel, usiamo direttamente le API interne relative
+const BACKEND_URL = '';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('cantieri');
