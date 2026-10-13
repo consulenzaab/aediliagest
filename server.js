@@ -54,3 +54,15 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server avviato sulla porta ${PORT}`);
 });
+const { Pool } = require('pg');
+require('dotenv').config();
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+  family: 4 
+});
+
+module.exports = {
+  query: (text, params) => pool.query(text, params)
+};
